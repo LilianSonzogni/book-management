@@ -48,10 +48,26 @@ testing {
                 runtimeClasspath += sourceSets.main.get().output
             }
         }
+        val testComponent by registering(JvmTestSuite::class) {
+            sources {
+                kotlin {
+                    setSrcDirs(listOf("src/testComponent/kotlin"))
+                }
+                resources {
+                    setSrcDirs(listOf("src/testComponent/resources"))
+                }
+                compileClasspath += sourceSets.main.get().output
+                runtimeClasspath += sourceSets.main.get().output
+            }
+        }
     }
 }
 
 val testIntegrationImplementation: Configuration by configurations.getting {
+    extendsFrom(configurations.implementation.get())
+}
+
+val testComponentImplementation: Configuration by configurations.getting {
     extendsFrom(configurations.implementation.get())
 }
 
@@ -68,6 +84,19 @@ dependencies {
     testIntegrationImplementation("org.testcontainers:jdbc:1.21.4")
     testIntegrationImplementation("org.testcontainers:postgresql:1.21.4")
     testIntegrationImplementation("io.kotest.extensions:kotest-extensions-testcontainers:2.0.2")
+
+    testComponentImplementation("io.cucumber:cucumber-java:7.34.3")
+    testComponentImplementation("io.cucumber:cucumber-spring:7.34.3")
+    testComponentImplementation("io.cucumber:cucumber-junit-platform-engine:7.34.3")
+    testComponentImplementation("io.rest-assured:rest-assured:6.0.0")
+    testComponentImplementation("org.junit.platform:junit-platform-suite:6.0.3")
+    testComponentImplementation("org.testcontainers:testcontainers:1.21.4")
+    testComponentImplementation("org.testcontainers:jdbc:1.21.4")
+    testComponentImplementation("org.testcontainers:postgresql:1.21.4")
+    testComponentImplementation("io.kotest:kotest-assertions-core:5.9.1")
+    testComponentImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "mockito-core")
+    }
 }
 
 kotlin {
@@ -91,8 +120,12 @@ tasks.withType<Test> {
 }
 
 tasks.jacocoTestReport {
-    dependsOn(tasks.test, tasks.named("testIntegration"))
-    executionData(tasks.test.get(), tasks.named<Test>("testIntegration").get())
+    dependsOn(tasks.test, tasks.named("testIntegration"), tasks.named("testComponent"))
+    executionData(
+        tasks.test.get(),
+        tasks.named<Test>("testIntegration").get(),
+        tasks.named<Test>("testComponent").get(),
+    )
     reports {
         xml.required.set(true)
         html.required.set(true)
