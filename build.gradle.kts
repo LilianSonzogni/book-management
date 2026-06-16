@@ -25,6 +25,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-liquibase")
+    implementation("org.postgresql:postgresql")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -62,6 +64,10 @@ dependencies {
     testIntegrationImplementation("org.springframework.boot:spring-boot-starter-webmvc-test") {
         exclude(module = "mockito-core")
     }
+    testIntegrationImplementation("org.testcontainers:testcontainers:1.21.4")
+    testIntegrationImplementation("org.testcontainers:jdbc:1.21.4")
+    testIntegrationImplementation("org.testcontainers:postgresql:1.21.4")
+    testIntegrationImplementation("io.kotest.extensions:kotest-extensions-testcontainers:2.0.2")
 }
 
 kotlin {
