@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     jacoco
     id("info.solidsoft.pitest") version "1.19.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.8"
 }
 
 group = "com.example"
@@ -131,6 +132,15 @@ configurations.all {
     }
 }
 
+configurations.matching { it.name == "detekt" }.configureEach {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.jetbrains.kotlin") {
+            useVersion("2.0.21")
+            because("detekt 1.23.8 embeds and requires this exact Kotlin compiler version")
+        }
+    }
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
@@ -155,5 +165,26 @@ pitest {
     targetClasses.set(setOf("com.example.testunitairetp1.domain.*"))
     targetTests.set(setOf("com.example.testunitairetp1.domain.*"))
     outputFormats.set(setOf("HTML", "XML"))
+}
+
+detekt {
+    toolVersion = "1.23.8"
+    config.setFrom(files("config/detekt.yml"))
+    buildUponDefaultConfig = true
+    source.setFrom(
+        "src/main/kotlin",
+        "src/test/kotlin",
+        "src/testIntegration/kotlin",
+        "src/testComponent/kotlin",
+        "src/testArchitecture/kotlin",
+    )
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        sarif.required.set(true)
+    }
 }
 

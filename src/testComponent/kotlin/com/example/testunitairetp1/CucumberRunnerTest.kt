@@ -18,6 +18,7 @@ import org.testcontainers.lifecycle.Startables
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.example.testunitairetp1")
 @CucumberContextConfiguration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Suppress("UtilityClassWithPublicConstructor") // must be instantiable for the Spring test context
 class CucumberRunnerTest {
 
     companion object {

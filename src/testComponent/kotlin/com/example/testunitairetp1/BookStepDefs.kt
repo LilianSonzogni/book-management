@@ -11,6 +11,7 @@ import io.restassured.http.ContentType
 import io.restassured.path.json.JsonPath
 import io.restassured.response.Response
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.http.HttpStatus
 
 class BookStepDefs {
 
@@ -33,7 +34,7 @@ class BookStepDefs {
             .`when`()
             .post("/books")
             .then()
-            .statusCode(201)
+            .statusCode(HttpStatus.CREATED.value())
     }
 
     @When("the user retrieves all the books")
@@ -42,7 +43,7 @@ class BookStepDefs {
             .`when`()
             .get("/books")
             .then()
-            .statusCode(200)
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .response()
     }
