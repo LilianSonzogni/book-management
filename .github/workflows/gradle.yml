@@ -31,14 +31,14 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew test testIntegration
 
       - name: Publish test results
         uses: dorny/test-reporter@v1
         if: always()
         with:
           name: Test Results
-          path: build/test-results/test/*.xml
+          path: 'build/test-results/test/*.xml,build/test-results/testIntegration/*.xml'
           reporter: java-junit
 
       - name: Generate JaCoCo report
