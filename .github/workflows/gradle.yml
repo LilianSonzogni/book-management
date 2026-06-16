@@ -31,14 +31,14 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Run tests
-        run: ./gradlew test testIntegration testComponent
+        run: ./gradlew test testIntegration testComponent testArchitecture
 
       - name: Publish test results
         uses: dorny/test-reporter@v1
         if: always()
         with:
           name: Test Results
-          path: 'build/test-results/test/*.xml,build/test-results/testIntegration/*.xml,build/test-results/testComponent/*.xml'
+          path: 'build/test-results/test/*.xml,build/test-results/testIntegration/*.xml,build/test-results/testComponent/*.xml,build/test-results/testArchitecture/*.xml'
           reporter: java-junit
 
       - name: Upload Cucumber report
