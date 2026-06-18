@@ -44,3 +44,6 @@ out/
 
 ### Course material ###
 *.pdf
+
+# Rapport k6 généré
+k6/summary.html

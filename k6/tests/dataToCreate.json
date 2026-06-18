@@ -1,0 +1,10 @@
+[
+  { "title": "Clean Code", "author": "Robert C. Martin" },
+  { "title": "The Pragmatic Programmer", "author": "David Thomas" },
+  { "title": "Design Patterns", "author": "Gang of Four" },
+  { "title": "Refactoring", "author": "Martin Fowler" },
+  { "title": "Domain-Driven Design", "author": "Eric Evans" },
+  { "title": "Working Effectively with Legacy Code", "author": "Michael Feathers" },
+  { "title": "Test Driven Development", "author": "Kent Beck" },
+  { "title": "The Clean Coder", "author": "Robert C. Martin" }
+]
