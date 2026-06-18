@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: TestUnitaireTp1
   liquibase:
     change-log: classpath:db/changelog.xml
   datasource:

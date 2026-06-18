@@ -39,7 +39,7 @@ class BookUseCasePropertyTest : FunSpec({
 
             val result = useCase.listBooks()
 
-            result shouldBeSortedWith compareBy { it.title }
+            result shouldBeSortedWith compareBy { it.title.lowercase() }
         }
     }
 })
