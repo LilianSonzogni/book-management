@@ -85,4 +85,41 @@ class BookUseCaseTest : FunSpec({
             Book("Clean Code", "")
         }
     }
+
+    // Réservation - cas nominal
+    test("reserveBook should reserve an available book") {
+        // Arrange
+        every { bookRepository.findByTitle("Clean Code") } returns Book("Clean Code", "Robert C. Martin")
+        every { bookRepository.reserve("Clean Code") } just runs
+
+        // Act
+        bookUseCase.reserveBook("Clean Code")
+
+        // Assert
+        verify(exactly = 1) { bookRepository.reserve("Clean Code") }
+    }
+
+    // Réservation - cas pathologiques
+    test("reserveBook should throw and not reserve when the book is already reserved") {
+        // Arrange
+        every { bookRepository.findByTitle("Refactoring") } returns
+            Book("Refactoring", "Martin Fowler", reserved = true)
+
+        // Act & Assert
+        shouldThrow<IllegalStateException> {
+            bookUseCase.reserveBook("Refactoring")
+        }
+        verify(exactly = 0) { bookRepository.reserve("Refactoring") }
+    }
+
+    test("reserveBook should throw and not reserve when the book does not exist") {
+        // Arrange
+        every { bookRepository.findByTitle("Unknown") } returns null
+
+        // Act & Assert
+        shouldThrow<NoSuchElementException> {
+            bookUseCase.reserveBook("Unknown")
+        }
+        verify(exactly = 0) { bookRepository.reserve("Unknown") }
+    }
 })

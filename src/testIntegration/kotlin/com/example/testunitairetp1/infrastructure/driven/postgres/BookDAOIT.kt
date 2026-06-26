@@ -50,6 +50,36 @@ class BookDAOIT : FunSpec() {
         test("findAll with an empty database should return an empty list") {
             bookDAO.findAll() shouldBe emptyList()
         }
+
+        test("a freshly saved book should not be reserved") {
+            bookDAO.save(Book("Clean Code", "Robert C. Martin"))
+
+            bookDAO.findByTitle("Clean Code") shouldBe Book("Clean Code", "Robert C. Martin", reserved = false)
+        }
+
+        test("findByTitle should return null when no book matches") {
+            bookDAO.findByTitle("Unknown") shouldBe null
+        }
+
+        test("reserve should mark the book as reserved") {
+            bookDAO.save(Book("Clean Code", "Robert C. Martin"))
+
+            bookDAO.reserve("Clean Code")
+
+            bookDAO.findByTitle("Clean Code") shouldBe Book("Clean Code", "Robert C. Martin", reserved = true)
+        }
+
+        test("reserve should only affect the targeted book") {
+            bookDAO.save(Book("Clean Code", "Robert C. Martin"))
+            bookDAO.save(Book("Design Patterns", "Gang of Four"))
+
+            bookDAO.reserve("Clean Code")
+
+            bookDAO.findAll() shouldContainExactlyInAnyOrder listOf(
+                Book("Clean Code", "Robert C. Martin", reserved = true),
+                Book("Design Patterns", "Gang of Four", reserved = false),
+            )
+        }
     }
 
     companion object {

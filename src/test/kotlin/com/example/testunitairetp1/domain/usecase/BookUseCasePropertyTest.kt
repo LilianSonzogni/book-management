@@ -52,4 +52,10 @@ private class FakeBookRepository : BookRepository {
     }
 
     override fun findAll(): List<Book> = books.toList()
+
+    override fun findByTitle(title: String): Book? = books.firstOrNull { it.title == title }
+
+    override fun reserve(title: String) {
+        books.replaceAll { if (it.title == title) it.copy(reserved = true) else it }
+    }
 }
